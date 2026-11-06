@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-box">
+
+    <h2>Регистрация</h2>
+
+    <!-- Сообщения Flask -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <p class="{{ category }}">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Форма регистрации -->
+    <form method="POST" action="{{ url_for('register') }}">
+
+        <input
+                type="text"
+                name="username"
+                placeholder="Имя пользователя"
+                required
+        >
+
+        <input
+                type="email"
+                name="email"
+                placeholder="Электронная почта"
+                required
+        >
+
+        <input
+                type="password"
+                name="password"
+                placeholder="Пароль"
+                required
+        >
+
+        <button type="submit" class="primary">
+            Зарегистрироваться
+        </button>
+
+    </form>
+
+    <p>
+        Уже есть аккаунт?
+        <a href="{{ url_for('index') }}">На главную</a>
+    </p>
+
+</div>
+
+<!-- Список пользователей -->
+<section class="users-section">
+
+    <h3>Список существующих пользователей</h3>
+
+    <ul class="users-list">
+
+        {% for user in users %}
+
+        <li>
+                <span>
+                    <strong>ID:</strong> {{ user.id }} |
+                    <strong>Логин:</strong> {{ user.username }} |
+                    <strong>Email:</strong> {{ user.email }}
+                </span>
+
+            <form method="POST"
+                  action="{{ url_for('delete_user', user_id=user.id) }}">
+
+                <button type="submit" class="btn-delete">
+                    Удалить
+                </button>
+
+            </form>
+        </li>
+
+        {% else %}
+
+        <li>Пользователей пока нет.</li>
+
+        {% endfor %}
+
+    </ul>
+
+</section>
+
+<a class="back-link" href="{{ url_for('index') }}">
+    Вернуться на главную
+</a>
+
+{% endblock %}

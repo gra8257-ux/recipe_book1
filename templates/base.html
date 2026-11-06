@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Книга рецептов</title>
+
+    <!-- Подключение CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="site">
+
+    <!-- Шапка сайта -->
+    <header class="topbar">
+
+        <h1 class="logo">Книга рецептов</h1>
+
+        <nav class="nav">
+            <a href="{{ url_for('index') }}">Главная</a>
+            <a href="{{ url_for('register') }}">Регистрация</a>
+        </nav>
+
+    </header>
+
+    <!-- Содержимое страницы -->
+    <main class="page-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</div>
+
+</body>
+</html>

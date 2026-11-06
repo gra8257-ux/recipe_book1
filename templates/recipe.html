@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a class="back-link" href="{{ url_for('index') }}">
+    ← Вернуться к рецептам
+</a>
+
+<h1 class="center-title">{{ recipe.title }}</h1>
+
+<p class="recipe-description">
+    {{ recipe.description }}
+</p>
+
+<div class="recipe-detail">
+
+    <!-- Левая часть: информация о рецепте -->
+    <section class="detail-panel">
+
+        <h2>О рецепте</h2>
+
+        <div class="recipe-image-placeholder">
+            🍽️
+        </div>
+
+        <div class="detail-meta">
+            <p>⏱ Время приготовления: {{ recipe.time }}</p>
+            <p>🍴 Количество: {{ recipe.portions }}</p>
+        </div>
+
+    </section>
+
+    <!-- Правая часть: ингредиенты и приготовление -->
+    <section class="detail-panel">
+
+        <h2>Ингредиенты</h2>
+
+        <div class="ingredients-box">
+
+            <ul>
+                {% for ingredient in recipe.ingredients %}
+                <li>{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+
+        <h3>Способ приготовления</h3>
+
+        <ol class="steps-list">
+            {% for step in recipe.steps %}
+            <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+
+    </section>
+
+</div>
+
+<a class="back-link" href="{{ url_for('index') }}">
+    ← Вернуться к каталогу
+</a>
+
+{% endblock %}
