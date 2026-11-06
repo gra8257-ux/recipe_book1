@@ -17,7 +17,7 @@ app.config["SQLALCHEMY_ECHO"] = True
 db = SQLAlchemy(app)
 
 
-# Model - работа с пользователями
+# работа с пользователями
 class User(db.Model):
     __tablename__ = "users"
 
@@ -31,7 +31,7 @@ class User(db.Model):
         return f"<User(id={self.id}, username='{self.username}')>"  # помощь в отслеживании юзеров с помощью консоли
 
 
-# Главная страница. Она открывается сразу и не требует регистрации.
+# Главная страница.
 @app.route("/")
 def index():
     return render_template("home.html")
@@ -156,7 +156,7 @@ def register():
 
         return redirect(url_for("register"))
 
-    # Список пользователей оставлен на странице регистрации, как в исходном коде.
+    # Список пользователей.
     all_users = db.session.scalars(db.select(User)).all()
     return render_template("register.html", users=all_users)
 
