@@ -1,5 +1,5 @@
 * { box-sizing: border-box; }
-
+/*универсальный селектор, помогает учитывать отступы и границы заданной ширины высоты элементов*/
 :root {
   --red: #c34245;
   --red-dark: #b83b3f;
@@ -12,59 +12,59 @@
 }
 
 body {
-  margin: 0;
-  background: #f4f1ee;
-  color: var(--text);
+  margin: 0; /* убирает стандартные отступы в веб версии чтобы страница началась с края*/
+  background: #f4f1ee; /*фон устанавливаю */
+  color: var(--text); /*цвет текста и тип */
   font-family: "Comic Sans MS", "Segoe Print", cursive;
 }
-
+/*тег ссылка убирает стандартные подчеркивания ссылок и благодаря inherit наследует цвет окр элемента*/
 a {
   color: inherit;
   text-decoration: none;
 }
-
+/*кнопки поле ввода, задается наследственность для единого стиля */
 button, input {
   font: inherit;
 }
 
 .site {
-  width: min(100%, 1440px);
-  min-height: 100vh;
-  margin: 0 auto;
+  width: min(100%, 1440px);/*ог и оф контейнер для струк, контроль мак, центр*/
+  min-height: 100vh; /* мин высота элемента*/
+  margin: 0 auto;/*автоматическое гор отступы а 0 св и сн нет внешнего отступа*/
   background: var(--paper);
 }
-
+/*шапка*/
 .topbar {
-  min-height: 75px;
-  padding: 15px 4%;
-  display: flex;
+  min-height: 75px;/*мин в эл*/
+  padding: 15px 4%;/*вн от св и сн, сл и спр % от род*/
+  display: flex;/*ставит в одну строку */
   align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  border-bottom: 1px solid #f0e5e3;
+  justify-content: space-between;/*распр пространства*/
+  gap: 18px;/*раст м эл*/
+  border-bottom: 1px solid #f0e5e3;/*н.г тол, сп л, цвет виз отделяет от всего */
 }
-
+/*название*/
 .logo {
   margin: 0;
   color: var(--red);
   font-family: Georgia, serif;
-  font-size: clamp(22px, 2.3vw, 32px);
-  font-weight: bold;
+  font-size: clamp(22px, 2.3vw, 32px);/*с. создает адоптивные размеры*/
+  font-weight: bold;/*текст жирный*/
 }
-
+/*ссылки навигации гл, рег*/
 .nav {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 22px;
+  flex-wrap: wrap;/*разрешает перенос на сл строку при нехватке места*/
+  gap: 22px;/*рас меж ссылками*/
   color: var(--red);
   font-size: 14px;
 }
-
+/*нав на ссылки*/
 .nav a:hover {
-  text-decoration: underline;
+  text-decoration: underline;/*ср под при наведение курсора */
 }
-
+/*ос кнопки*/
 .primary {
   border: 0;
   border-radius: 3px;
@@ -73,46 +73,46 @@ button, input {
   padding: 11px 22px;
   cursor: pointer;
 }
-
+/*наведение на кнопку*/
 .primary:hover {
   background: var(--red-dark);
 }
-
+/*ос сод страницы, кон для расп сод каждой страницы */
 .page-content {
   padding: 28px 4% 55px;
 }
-
+/*заголовок*/
 .center-title {
   text-align: center;
   font-size: 25px;
   font-weight: normal;
   margin: 5px 0 24px;
 }
-
+/*втор текст*/
 .muted {
   color: var(--muted);
 }
 
 /* Главная страница */
-
+/*прив блок*/
 .hero {
   min-height: 245px;
   padding: 25px 5% 90px;
   text-align: center;
   color: white;
   background: var(--red);
-  position: relative;
-  overflow: hidden;
+  position: relative;/*отн. позиц отоб отно блока а не страницы*/
+  overflow: hidden;/*скр части чтобы дек не выходил за пределы баннера */
 }
-
+/*внт прив блок*/
 .hero h2 {
   margin: 0 0 8px;
   font-size: clamp(25px, 3vw, 42px);
 }
-
+/*опис прив блок*/
 .hero p {
   margin: 0 auto;
-  max-width: 520px;
+  max-width: 520px;/*огр шир текста*/
   font-size: 13px;
 }
 
