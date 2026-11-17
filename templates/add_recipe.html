@@ -1,0 +1,125 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="add-recipe-title">
+    Добавление рецепта
+</h1>
+
+<form action="{{ url_for('add_recipe') }}"
+      method="POST"
+      enctype="multipart/form-data"
+      class="add-recipe-form">
+
+    <div class="form-group">
+        <label for="title">Название блюда:</label>
+        <input type="text"
+               class="text-input"
+               id="title"
+               name="title"
+               placeholder="Например, Синабоны"
+               required>
+    </div>
+
+    <div class="form-group">
+        <label for="category">Категория:</label>
+        <input type="text"
+               class="text-input"
+               id="category"
+               name="category"
+               placeholder="Например, Десерт"
+               required>
+    </div>
+
+    <div class="form-group">
+        <label for="time">Время приготовления:</label>
+        <input type="text"
+               class="text-input"
+               id="time"
+               name="time"
+               placeholder="Например, 40 минут"
+               required>
+    </div>
+
+    <div class="form-group">
+        <label for="portions">Количество порций:</label>
+        <input type="text"
+               class="text-input"
+               id="portions"
+               name="portions"
+               placeholder="Например, 4 порции"
+               required>
+    </div>
+
+    <div class="form-group">
+        <label for="calories">Калорийность:</label>
+        <input type="text"
+               class="text-input"
+               id="calories"
+               name="calories"
+               placeholder="Например, 250 ккал"
+               required>
+    </div>
+
+    <div class="form-group">
+        <label for="ingredients">Ингредиенты:</label>
+        <textarea class="text-textarea"
+                  id="ingredients"
+                  name="ingredients"
+                  placeholder="Каждый ингредиент с новой строки"
+                  required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="steps">Способ приготовления:</label>
+        <textarea class="text-textarea"
+                  id="steps"
+                  name="steps"
+                  placeholder="Каждый шаг с новой строки"
+                  required></textarea>
+    </div>
+
+    <!-- Выбор фотографии -->
+    <div class="form-group">
+        <label for="photo">Фото блюда:</label>
+
+        <div class="photo-upload">
+            <label for="photo" class="photo-button">
+                Выбрать фото
+            </label>
+
+            <input type="file"
+                   accept=".jpg,.jpeg,.png,.webp"
+                   id="photo"
+                   name="image"
+                   class="none"
+                   required>
+
+            <p id="file-name">Фотография не выбрана</p>
+        </div>
+    </div>
+
+    <div class="add-recipe-submit">
+        <button type="submit" class="primary">
+            Отправить рецепт
+        </button>
+    </div>
+
+</form>
+
+<!-- Отображение имени выбранного файла -->
+<script>
+    const photoInput = document.getElementById("photo");
+    const fileName = document.getElementById("file-name");
+
+    photoInput.addEventListener("change", function () {
+        if (this.files.length > 0) {
+            fileName.textContent = this.files[0].name;
+        } else {
+            fileName.textContent = "Фотография не выбрана";
+        }
+    });
+</script>
+
+{% endblock %}
