@@ -1,363 +1,378 @@
-* { box-sizing: border-box; }
-/*универсальный селектор, помогает учитывать отступы и границы заданной ширины высоты элементов*/
-:root {
-  --red: #c34245;
-  --red-dark: #b83b3f;
-  --paper: #ffffff;
-  --text: #292323;
-  --muted: #777;
-  --gray: #dedede;
-  --green: #55b51d;
-  --orange: #f2a12e;
+
+* {
+    box-sizing: border-box;
 }
 
+:root {
+    --red: #c34245;
+    --red-dark: #b83b3f;
+    --paper: #ffffff;
+    --text: #292323;
+    --muted: #777;
+    --gray: #dedede;
+    --green: #55b51d;
+    --orange: #f2a12e;
+}
+
+/* Шрифты */
+
+@font-face {
+    font-family: "Brevis";
+    src: url("/static/fonts/ofont.ru_Brevis.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Veles";
+    src: url("/static/fonts/ofont.ru_Veles.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Основные настройки */
+
 body {
-  margin: 0; /* убирает стандартные отступы в веб версии чтобы страница началась с края*/
-  background: #f4f1ee; /*фон устанавливаю */
-  color: var(--text); /*цвет текста и тип */
-  font-family: "Comic Sans MS", "Segoe Print", cursive;
+    margin: 0;
+    background: #f4f1ee;
+    color: var(--text);
+    font-family: "Comic Sans MS", "Segoe Print", cursive;
 }
-/*тег ссылка убирает стандартные подчеркивания ссылок и благодаря inherit наследует цвет окр элемента*/
+
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
-/*кнопки поле ввода, задается наследственность для единого стиля */
+
 button, input {
-  font: inherit;
+    font: inherit;
 }
 
 .site {
-  width: min(100%, 1440px);/*ог и оф контейнер для струк, контроль мак, центр*/
-  min-height: 100vh; /* мин высота элемента*/
-  margin: 0 auto;/*автоматическое гор отступы а 0 св и сн нет внешнего отступа*/
-  background: var(--paper);
+    width: min(100%, 1440px);
+    min-height: 100vh;
+    margin: 0 auto;
+    background: var(--paper);
 }
-/*шапка*/
+
+/* Шапка сайта */
+
 .topbar {
-  min-height: 75px;/*мин в эл*/
-  padding: 15px 4%;/*вн от св и сн, сл и спр % от род*/
-  display: flex;/*ставит в одну строку */
-  align-items: center;
-  justify-content: space-between;/*распр пространства*/
-  gap: 18px;/*раст м эл*/
-  border-bottom: 1px solid #f0e5e3;/*н.г тол, сп л, цвет виз отделяет от всего */
+    min-height: 75px;
+    padding: 15px 4%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    border-bottom: 1px solid #f0e5e3;
+    position: relative;
 }
-/*название*/
+
 .logo {
-  margin: 0;
-  color: var(--red);
-  font-family: Georgia, serif;
-  font-size: clamp(22px, 2.3vw, 32px);/*с. создает адоптивные размеры*/
-  font-weight: bold;/*текст жирный*/
+    margin: 0;
+    color: var(--red);
+    font-family: "Brevis", serif;
+    font-size: clamp(22px, 2.3vw, 32px);
+    font-weight: normal;
+    text-align: center;
 }
-/*ссылки навигации гл, рег*/
+
 .nav {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;/*разрешает перенос на сл строку при нехватке места*/
-  gap: 22px;/*рас меж ссылками*/
-  color: var(--red);
-  font-size: 14px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 22px;
+    color: var(--red);
+    font-size: 14px;
+    position: absolute;
+    right: 4%;
 }
-/*нав на ссылки*/
+
 .nav a:hover {
-  text-decoration: underline;/*ср под при наведение курсора */
+    text-decoration: underline;
 }
-/*ос кнопки*/
+
+/* Кнопки */
+
 .primary {
-  border: 0;
-  border-radius: 3px;
-  background: var(--red);
-  color: white;
-  padding: 11px 22px;
-  cursor: pointer;
+    border: 0;
+    border-radius: 3px;
+    background: var(--red);
+    color: white;
+    padding: 11px 22px;
+    cursor: pointer;
 }
-/*наведение на кнопку*/
+
 .primary:hover {
-  background: var(--red-dark);
+    background: var(--red-dark);
 }
-/*ос сод страницы, кон для расп сод каждой страницы */
+
+/* Основное содержимое */
+
 .page-content {
-  padding: 28px 4% 55px;
+    padding: 28px 4% 55px;
 }
-/*заголовок*/
+
 .center-title {
-  text-align: center;
-  font-size: 25px;
-  font-weight: normal;
-  margin: 5px 0 24px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: normal;
+    margin: 5px 0 24px;
 }
-/*втор текст*/
+
 .muted {
-  color: var(--muted);
+    color: var(--muted);
 }
 
 /* Главная страница */
-/*прив блок*/
+
 .hero {
-  min-height: 245px;
-  padding: 25px 5% 90px;
-  text-align: center;
-  color: white;
-  background: var(--red);
-  position: relative;/*отн. позиц отоб отно блока а не страницы*/
-  overflow: hidden;/*скр части чтобы дек не выходил за пределы баннера */
+    min-height: 270px;
+    padding: 25px 5% 110px;
+    text-align: center;
+    color: white;
+    background: var(--red);
+    position: relative;
+    overflow: hidden;
 }
-/*внт прив блок*/
+
 .hero h2 {
-  margin: 0 0 8px;
-  font-size: clamp(25px, 3vw, 42px);
+    margin: 0 0 8px;
+    font-size: clamp(25px, 3vw, 42px);
 }
-/*опис прив блок*/
+
 .hero p {
-  margin: 0 auto;
-  max-width: 520px;/*огр шир текста*/
-  font-size: 13px;
+    margin: 0 auto;
+    max-width: 520px;
+    font-size: 13px;
 }
 
-.hero-food {
-  display: flex;
-  justify-content: space-around;
-  align-items: end;
-  gap: 15px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -6px;
+/* Баннер с синабонами */
+
+.hero-image {
+    width: calc(100% + 8%);
+    margin: -28px -4% 0;
+    padding: 0;
 }
 
-.hero-food span {
-  width: 19%;
-  height: 85px;
-  border-radius: 50% 50% 8px 8px;
-  background: radial-gradient(
-    ellipse at 50% 35%,
-    #f8d7a2 0 28%,
-    #a95d32 29% 39%,
-    #f3c58b 40% 55%,
-    #b76b38 56% 70%,
-    transparent 71%
-  );
+.hero-image img {
+    display: block;
+    width: 100%;
+    height: auto;
 }
+
+/* Поиск */
 
 .search-wrap {
-  display: flex;
-  width: min(650px, 90%);
-  margin: 18px auto;
-  border: 1px solid var(--red);
-  border-radius: 24px;
-  overflow: hidden;
+    display: flex;
+    width: min(650px, 90%);
+    margin: 18px auto;
+    border: 1px solid var(--red);
+    border-radius: 24px;
+    overflow: hidden;
 }
 
 .search-wrap input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  padding: 12px 18px;
-  outline: none;
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    padding: 12px 18px;
+    outline: none;
 }
 
 .search-wrap button {
-  border: 0;
-  background: var(--red);
-  color: white;
-  padding: 0 20px;
-  cursor: pointer;
+    border: 0;
+    background: var(--red);
+    color: white;
+    padding: 0 20px;
+    cursor: pointer;
 }
 
+/* Категории */
+
 .categories {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0;
-  margin: 12px auto 34px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 12px auto 34px;
 }
 
 .categories a {
-  color: var(--red);
-  padding: 5px 17px;
-  border-right: 1px solid var(--red);
-  font-size: 13px;
+    color: var(--red);
+    padding: 5px 17px;
+    border-right: 1px solid var(--red);
+    font-size: 13px;
 }
 
 .categories a:last-child {
-  border: 0;
+    border: 0;
 }
 
+/* Карточки рецептов */
+
 .recipe-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    margin-top: 40px;
+}
+
+.recipe-item {
+    text-align: center;
+}
+
+
+.recipe-item {
+    text-align: center;
 }
 
 .recipe-card {
-  background: var(--red);
-  border-radius: 28px;
-  padding: 14px;
-  min-height: 190px;
-  color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 1 / 0.72;
+    background: var(--red);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(80, 40, 40, 0.12);
+    transition: 0.25s;
 }
 
-.recipe-card h3 {
-  margin: 8px 4px;
-  font-size: 17px;
-  font-weight: normal;
+.recipe-card:hover {
+    transform: translateY(-5px);
 }
 
-.recipe-card p {
-  margin: 8px 4px;
-  font-size: 13px;
+.recipe-card img {
+    width: 75%;
+    height: 75%;
+    object-fit: cover;
+    border-radius: 25px;
+    overflow: hidden;
 }
+
+.recipe-name {
+    margin: 14px 0 0;
+    color: var(--red);
+    font-family: "Veles", serif;
+    font-size: 24px;
+    font-weight: normal;
+    text-align: center;
+}
+
 
 /* Страница регистрации */
 
 .auth-box {
-  width: min(430px, 95%);
-  margin: 30px auto;
-  text-align: center;
+    width: min(430px, 95%);
+    margin: 30px auto;
+    text-align: center;
 }
 
 .auth-box h2 {
-  font-size: 27px;
-  font-weight: normal;
-  margin: 15px 0 22px;
+    font-size: 27px;
+    font-weight: normal;
+    margin: 15px 0 22px;
 }
 
 .auth-box input {
-  display: block;
-  width: 100%;
-  height: 52px;
-  margin: 16px 0;
-  border: 0;
-  border-radius: 10px;
-  background: #eee;
-  padding: 12px;
-  outline-color: var(--red);
+    display: block;
+    width: 100%;
+    height: 52px;
+    margin: 16px 0;
+    border: 0;
+    border-radius: 10px;
+    background: #eee;
+    padding: 12px;
+    outline-color: var(--red);
 }
 
 .auth-box .primary {
-  width: 100%;
-  margin-top: 22px;
-  font-size: 16px;
+    width: 100%;
+    margin-top: 22px;
+    font-size: 16px;
 }
 
 .auth-box p {
-  margin-top: 16px;
-  font-size: 14px;
+    margin-top: 16px;
+    font-size: 14px;
 }
 
 .auth-box a {
-  color: var(--red);
+    color: var(--red);
 }
 
+/* Сообщения */
+
 .success, .error {
-  padding: 12px;
-  border-radius: 8px;
-  margin: 12px 0;
-  font-size: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 14px;
 }
 
 .success {
-  color: #286d16;
-  background: #e7f5df;
+    color: #286d16;
+    background: #e7f5df;
 }
 
 .error {
-  color: #a52c30;
-  background: #fde8e8;
+    color: #a52c30;
+    background: #fde8e8;
 }
 
 /* Список пользователей */
 
 .users-section {
-  max-width: 850px;
-  margin: 45px auto 0;
+    max-width: 850px;
+    margin: 45px auto 0;
 }
 
 .users-section h3 {
-  text-align: center;
-  font-weight: normal;
-  font-size: 21px;
-  margin-bottom: 22px;
+    text-align: center;
+    font-weight: normal;
+    font-size: 21px;
+    margin-bottom: 22px;
 }
 
 .users-list {
-  list-style: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
 }
 
 .users-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  padding: 13px 16px;
-  margin: 10px 0;
-  background: #f4f1ee;
-  border-radius: 10px;
-  font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 13px 16px;
+    margin: 10px 0;
+    background: #f4f1ee;
+    border-radius: 10px;
+    font-size: 13px;
 }
 
 .btn-delete {
-  border: 0;
-  border-radius: 5px;
-  padding: 7px 12px;
-  color: white;
-  background: #d34b4b;
-  cursor: pointer;
+    border: 0;
+    border-radius: 5px;
+    padding: 7px 12px;
+    color: white;
+    background: #d34b4b;
+    cursor: pointer;
 }
 
 .btn-delete:hover {
-  background: #b83b3f;
+    background: #b83b3f;
 }
 
 .back-link {
-  display: block;
-  width: fit-content;
-  margin: 30px auto 0;
-  color: var(--red);
+    display: block;
+    width: fit-content;
+    margin: 30px auto 0;
+    color: var(--red);
 }
 
-@media (max-width: 700px) {
-  .topbar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .nav {
-    gap: 12px;
-  }
-
-  .recipe-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .users-list li {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .hero {
-    min-height: 230px;
-  }
-}
-.text-center {
-    text-align: center;
-}
-.topbar {
-    position: relative;
-    justify-content: center;
-}
-
-.logo {
-    text-align: center;
-}
-
-.nav {
-    position: absolute;
-    right: 4%;
-}
 /* Страница отдельного рецепта */
 
 .recipe-description {
@@ -390,15 +405,21 @@ button, input {
 }
 
 .recipe-image-placeholder {
+    width: 100%;
+    height: 280px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    width: min(100%, 360px);
-    height: 230px;
-    margin: 0 auto 20px;
-    border-radius: 25px;
-    background: #f4d6c2;
-    font-size: 75px;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 20px;
+    background: #f8eeee;
+}
+
+.recipe-image-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 20px;
 }
 
 .detail-meta {
@@ -432,7 +453,79 @@ button, input {
     margin-bottom: 12px;
 }
 
+/* Форма добавления рецепта */
+
+.form-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.text-input {
+    background-color: var(--gray);
+    border: 0;
+    border-radius: 24px;
+    width: 300px;
+}
+
+.text-textarea {
+    border-radius: 24px;
+    background-color: var(--gray);
+    border: 0;
+    resize: none;
+    height: 130px;
+    width: 300px;
+}
+
+.photo-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    background-color: var(--gray);
+    font-size: 35px;
+    border-radius: 24px;
+}
+
+.none {
+    display: none;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 10px;
+}
+
+/* Адаптация для телефона */
+
 @media (max-width: 700px) {
+    .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .nav {
+        position: static;
+        gap: 12px;
+    }
+
+    .recipe-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .users-list li {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .hero {
+        min-height: 250px;
+    }
+
     .recipe-detail {
         grid-template-columns: 1fr;
     }
@@ -440,4 +533,88 @@ button, input {
     .detail-panel {
         border-radius: 30px;
     }
+}
+
+/* Страница добавления рецепта */
+
+.add-recipe-title {
+    text-align: center;
+    color: var(--red);
+    font-family: "Brevis", serif;
+    font-size: 32px;
+    font-weight: normal;
+    margin: 15px 0 35px;
+}
+
+.add-recipe-form {
+    width: min(650px, 95%);
+    margin: 0 auto;
+}
+
+.add-recipe-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 22px;
+}
+
+.add-recipe-form .form-group > label {
+    color: var(--red);
+    font-size: 16px;
+}
+
+.add-recipe-form .text-input,
+.add-recipe-form .text-textarea {
+    width: 100%;
+    padding: 13px 18px;
+    border: 1px solid #eadada;
+    border-radius: 14px;
+    background: #f8f5f3;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.add-recipe-form .text-input {
+    height: 48px;
+}
+
+.add-recipe-form .text-textarea {
+    height: 130px;
+    resize: vertical;
+}
+
+.photo-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.photo-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--red);
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.photo-button:hover {
+    background: var(--red-dark);
+}
+
+#file-name {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0;
+}
+
+.add-recipe-submit {
+    text-align: center;
+    margin-top: 35px;
+}
+
+.add-recipe-submit .primary {
+    min-width: 220px;
+    border-radius: 12px;
 }

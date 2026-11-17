@@ -1,43 +1,59 @@
+
 {% extends "base.html" %}
 
 {% block content %}
 
 <div class="text-center">
 
-    <h1>Добро пожаловать в Книгу рецептов!</h1>
-
-    <p>
-        Здесь вы сможете находить интересные рецепты
-        и делиться своими кулинарными идеями.
-    </p>
-
-    <h2>Каталог рецептов</h2>
-
-    <div class="recipe-grid">
-        <a href="{{ url_for('recipe_detail', recipe_id=1) }}" class="recipe-card">
-            <h3>Паста с томатным соусом</h3>
-            <p>Вкусное и простое блюдо на каждый день.</p>
-            <p>Подробнее →</p>
-        </a>
-
-        <a href="{{ url_for('recipe_detail', recipe_id=2) }}" class="recipe-card">
-            <h3>Домашний овощной суп</h3>
-            <p>Лёгкий и ароматный обед для всей семьи.</p>
-            <p>Подробнее →</p>
-        </a>
-
-        <a href="{{ url_for('recipe_detail', recipe_id=3) }}" class="recipe-card">
-            <h3>Шоколадный десерт</h3>
-            <p>Нежное лакомство для любителей сладкого.</p>
-            <p>Подробнее →</p>
-        </a>
+    <!-- Красный баннер на главной странице -->
+    <div class="hero-image">
+        <img src="{{ url_for('static', filename='cinnabons/hero1.png') }}"
+             alt="Книга рецептов">
     </div>
-    <p>
-    </p>
 
-    <a href="{{ url_for('register') }}" class="primary">
-        Зарегистрироваться
-    </a>
+    <!-- Каталог рецептов -->
+    <div class="recipe-grid">
+
+        {% for recipe in recipes %}
+
+        <div class="recipe-item">
+
+            <!-- Красная карточка с фотографией -->
+            <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}"
+               class="recipe-card">
+
+                {% if recipe.image %}
+                    <img src="{{ url_for('static', filename=recipe.image) }}"
+                         alt="{{ recipe.title }}">
+                {% endif %}
+
+            </a>
+
+            <!-- Название под карточкой -->
+            <h3 class="recipe-name">{{ recipe.title }}</h3>
+
+        </div>
+
+        {% else %}
+
+        <p>Пока рецептов нет</p>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- Кнопки -->
+    <div class="buttons">
+
+        <a href="{{ url_for('register') }}" class="primary">
+            Зарегистрироваться
+        </a>
+
+        <a href="{{ url_for('add_recipe') }}" class="primary">
+            Добавить рецепт
+        </a>
+
+    </div>
 
 </div>
 

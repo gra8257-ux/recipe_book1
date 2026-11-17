@@ -8,10 +8,6 @@
 
 <h1 class="center-title">{{ recipe.title }}</h1>
 
-<p class="recipe-description">
-    {{ recipe.description }}
-</p>
-
 <div class="recipe-detail">
 
     <!-- Левая часть: информация о рецепте -->
@@ -20,12 +16,16 @@
         <h2>О рецепте</h2>
 
         <div class="recipe-image-placeholder">
-            🍽️
-        </div>
+    {% if recipe.image %}
+        <img src="{{ url_for('static', filename=recipe.image) }}" alt="{{ recipe.title }}">
+    {% else %}
+        <p>Фото отсутствует</p>
+    {% endif %}
+</div>
 
         <div class="detail-meta">
             <p>⏱ Время приготовления: {{ recipe.time }}</p>
-            <p>🍴 Количество: {{ recipe.portions }}</p>
+            <p>🍴 Количество порций: {{ recipe.portions }}</p>
         </div>
 
     </section>
