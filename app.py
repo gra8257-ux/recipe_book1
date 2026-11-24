@@ -10,7 +10,6 @@ from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import or_
 
-
 # Папки и база данных
 
 DATA_DIR = Path(__file__).parent / "data"
@@ -77,7 +76,6 @@ class Recipe(db.Model):
 
     # Путь к фотографии рецепта
     image = db.Column(db.String(255), nullable=True)
-
     category = db.Column(db.String(100), nullable=False)
     time = db.Column(db.String(100), nullable=False)
     portions = db.Column(db.String(100), nullable=False)
@@ -93,12 +91,14 @@ class Recipe(db.Model):
 
 
 # Загрузчик пользователя для Flask-Login
+
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(User, int(user_id))
 
 
 # Главная страница
+
 @app.route("/")
 def index():
     recipes = db.session.scalars(
@@ -106,8 +106,6 @@ def index():
     ).all()
 
     return render_template("home.html", recipes=recipes)
-
-
 
 
 # Страница просмотра отдельного рецепта
@@ -141,6 +139,7 @@ def login():
 
 
 # Выход из аккаунта
+
 @app.route("/logout", methods=["POST"])
 @login_required
 def logout():
@@ -149,10 +148,12 @@ def logout():
 
 
 # Профиль
+
 @app.route("/profile")
 @login_required
 def profile():
     user = db.session.get(User, current_user.id)
+
     recipes = db.session.scalars(
         db.select(Recipe).where(Recipe.user_id == user.id)
     ).all()
@@ -173,9 +174,11 @@ def register():
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
 
-        # Проверка: занят ли логин ИЛИ почта (выводим одну ошибку)
+        # Проверка: занят ли логин ИЛИ почта
         existing_user = db.session.scalars(
-            db.select(User).where(or_(User.username == username, User.email == email))
+            db.select(User).where(
+                or_(User.username == username, User.email == email)
+            )
         ).first()
 
         if existing_user:
@@ -186,6 +189,7 @@ def register():
             username=username,
             email=email
         )
+
         new_user.set_password(password)
 
         try:
@@ -232,7 +236,6 @@ def add_recipe():
         time = request.form.get("time", "").strip()
         portions = request.form.get("portions", "").strip()
         calories = request.form.get("calories", "").strip()
-
         ingredients = request.form.get("ingredients", "").splitlines()
         steps = request.form.get("steps", "").splitlines()
 
@@ -292,35 +295,39 @@ def add_recipe():
     return render_template("add_recipe.html")
 
 
+# Создание базы данных и таблиц
+# Выполняется и при запуске через Gunicorn на Render
+
+with app.app_context():
+
+    db.create_all()
+
+    # Проверяем, есть ли столбцы в старой таблице recipes
+    columns = db.inspect(db.engine).get_columns("recipes")
+    column_names = [column["name"] for column in columns]
+
+    # Если столбца image нет, добавляем его
+    if "image" not in column_names:
+        db.session.execute(
+            db.text(
+                "ALTER TABLE recipes ADD COLUMN image VARCHAR(255)"
+            )
+        )
+
+    # Если столбца status нет, добавляем его
+    if "status" not in column_names:
+        db.session.execute(
+            db.text(
+                "ALTER TABLE recipes ADD COLUMN status VARCHAR(30) DEFAULT 'Опубликован'"
+            )
+        )
+
+    db.session.commit()
+
+    print("База данных и таблицы готовы.")
+
+
 # Запуск приложения
 
 if __name__ == "__main__":
-    with app.app_context():
-
-        db.create_all()
-
-        # Проверяем, есть ли столбцы в старой таблице recipes
-        columns = db.inspect(db.engine).get_columns("recipes")
-        column_names = [column["name"] for column in columns]
-
-        # Если столбца image нет, добавляем его
-        if "image" not in column_names:
-            db.session.execute(
-                db.text(
-                    "ALTER TABLE recipes ADD COLUMN image VARCHAR(255)"
-                )
-            )
-
-        # Если столбца status нет, добавляем его
-        if "status" not in column_names:
-            db.session.execute(
-                db.text(
-                    "ALTER TABLE recipes ADD COLUMN status VARCHAR(30) DEFAULT 'Опубликован'"
-                )
-            )
-
-        db.session.commit()
-
-        print("База данных и таблицы готовы.")
-
     app.run(debug=True)
