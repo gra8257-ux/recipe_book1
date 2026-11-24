@@ -9,6 +9,38 @@
     <!-- Подключение CSS -->
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Небольшие стили для иконки пользователя -->
+    <style>
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Расстояние между элементами меню */
+        }
+        .user-icon {
+            font-size: 24px;
+            text-decoration: none;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+        .user-icon:hover {
+            background-color: rgba(0, 0, 0, 0.1); /* Подсветка при наведении */
+        }
+        .btn-logout {
+            background: none;
+            border: none;
+            color: inherit;
+            font-family: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+        }
+        .btn-logout:hover {
+            opacity: 0.7;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,7 +54,25 @@
 
         <nav class="nav">
             <a href="{{ url_for('index') }}">Главная</a>
-            <a href="{{ url_for('register') }}">Регистрация</a>
+
+            {% if current_user.is_authenticated %}
+                <!-- Если пользователь зарегистрирован и вошёл -->
+
+                <!-- Иконка профиля -->
+                <a href="{{ url_for('profile') }}" class="user-icon" title="Мой профиль ({{ current_user.username }})">
+                    👤
+                </a>
+
+                <!-- Кнопка выхода (отправляет POST на /logout) -->
+                <form method="POST" action="{{ url_for('logout') }}" style="margin: 0;">
+                    <button type="submit" class="btn-logout">Выйти</button>
+                </form>
+
+            {% else %}
+                <!-- Если пользователь НЕ вошёл -->
+                <a href="{{ url_for('login') }}">Вход</a>
+                <a href="{{ url_for('register') }}">Регистрация</a>
+            {% endif %}
         </nav>
 
     </header>

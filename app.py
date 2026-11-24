@@ -3,10 +3,12 @@ from pathlib import Path
 from uuid import uuid4
 
 from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import or_
 
 
 # Папки и база данных
@@ -30,6 +32,10 @@ app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
 db = SQLAlchemy(app)
 
+# Настройка Flask-Login
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
+
 
 # Папка для фотографий рецептов
 
@@ -42,7 +48,7 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "webp"}
 
 # Работа с пользователями
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -50,6 +56,12 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     is_active = db.Column(db.Boolean, default=True)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
@@ -73,80 +85,29 @@ class Recipe(db.Model):
     ingredients = db.Column(db.JSON, nullable=False)
     steps = db.Column(db.JSON, nullable=False)
 
+    # ID пользователя
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
+
+    # Статус рецепта
+    status = db.Column(db.String(30), default="Опубликован", nullable=False)
+
+
+# Загрузчик пользователя для Flask-Login
+@login_manager.user_loader
+def load_user(user_id):
+    return db.session.get(User, int(user_id))
+
 
 # Главная страница
-
 @app.route("/")
 def index():
-    recipes = db.session.scalars(db.select(Recipe)).all()
+    recipes = db.session.scalars(
+        db.select(Recipe).where(Recipe.status == "Опубликован")
+    ).all()
+
     return render_template("home.html", recipes=recipes)
 
 
-# Временные рецепты для проверки страницы просмотра
-
-RECIPES = {
-    1: {
-        "title": "Паста с томатным соусом",
-        "description": "Простая и вкусная паста с ароматным томатным соусом.",
-        "time": "30 минут",
-        "portions": "2 порции",
-        "ingredients": [
-            "200 г макарон",
-            "3 помидора",
-            "2 зубчика чеснока",
-            "2 столовые ложки оливкового масла",
-            "Соль и специи по вкусу"
-        ],
-        "steps": [
-            "Отварите макароны в подсоленной воде до готовности.",
-            "Нарежьте помидоры небольшими кусочками.",
-            "Измельчите чеснок и обжарьте его на оливковом масле.",
-            "Добавьте помидоры и тушите около 10 минут.",
-            "Смешайте соус с макаронами и подавайте к столу."
-        ]
-    },
-
-    2: {
-        "title": "Домашний овощной суп",
-        "description": "Лёгкий овощной суп для вкусного домашнего обеда.",
-        "time": "40 минут",
-        "portions": "4 порции",
-        "ingredients": [
-            "3 картофелины",
-            "1 морковь",
-            "1 луковица",
-            "1,5 литра воды",
-            "Соль и зелень по вкусу"
-        ],
-        "steps": [
-            "Очистите и нарежьте картофель.",
-            "Нарежьте лук и натрите морковь.",
-            "Вскипятите воду и добавьте картофель.",
-            "Добавьте лук и морковь.",
-            "Варите до готовности овощей, затем добавьте зелень."
-        ]
-    },
-
-    3: {
-        "title": "Шоколадный десерт",
-        "description": "Нежный шоколадный десерт для любителей сладкого.",
-        "time": "25 минут",
-        "portions": "3 порции",
-        "ingredients": [
-            "100 г тёмного шоколада",
-            "100 мл сливок",
-            "2 столовые ложки сахара",
-            "1 яйцо"
-        ],
-        "steps": [
-            "Растопите шоколад на водяной бане.",
-            "Добавьте сливки и перемешайте.",
-            "Отдельно взбейте яйцо с сахаром.",
-            "Соедините обе смеси.",
-            "Разложите десерт по формочкам и охладите."
-        ]
-    }
-}
 
 
 # Страница просмотра отдельного рецепта
@@ -155,6 +116,52 @@ RECIPES = {
 def recipe_detail(recipe_id):
     recipe = db.get_or_404(Recipe, recipe_id)
     return render_template("recipe.html", recipe=recipe)
+
+
+# Страница входа
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+
+        user = db.session.scalars(
+            db.select(User).where(User.username == username)
+        ).first()
+
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for("index"))
+
+        flash("Неверный логин или пароль.", "error")
+        return redirect(url_for("login"))
+
+    return render_template("login.html")
+
+
+# Выход из аккаунта
+@app.route("/logout", methods=["POST"])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+
+# Профиль
+@app.route("/profile")
+@login_required
+def profile():
+    user = db.session.get(User, current_user.id)
+    recipes = db.session.scalars(
+        db.select(Recipe).where(Recipe.user_id == user.id)
+    ).all()
+
+    return render_template(
+        "profile.html",
+        user=user,
+        recipes=recipes
+    )
 
 
 # Страница регистрации
@@ -166,35 +173,20 @@ def register():
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
 
-        existing_username = db.session.scalars(
-            db.select(User).where(User.username == username)
+        # Проверка: занят ли логин ИЛИ почта (выводим одну ошибку)
+        existing_user = db.session.scalars(
+            db.select(User).where(or_(User.username == username, User.email == email))
         ).first()
 
-        if existing_username:
-            flash(
-                f"Ошибка: Логин '{username}' уже занят. Придумайте другой.",
-                "error"
-            )
+        if existing_user:
+            flash("Ошибка: это имя пользователя или почта уже заняты.", "error")
             return redirect(url_for("register"))
-
-        existing_email = db.session.scalars(
-            db.select(User).where(User.email == email)
-        ).first()
-
-        if existing_email:
-            flash(
-                f"Ошибка: Почта '{email}' уже используется. Введите другую.",
-                "error"
-            )
-            return redirect(url_for("register"))
-
-        hashed_password = generate_password_hash(password)
 
         new_user = User(
             username=username,
-            email=email,
-            password_hash=hashed_password
+            email=email
         )
+        new_user.set_password(password)
 
         try:
             db.session.add(new_user)
@@ -231,6 +223,7 @@ def delete_user(user_id):
 # Добавление рецептов с фотографиями
 
 @app.route("/add_recipe", methods=["GET", "POST"])
+@login_required
 def add_recipe():
     if request.method == "POST":
 
@@ -280,7 +273,9 @@ def add_recipe():
             calories=calories,
             ingredients=ingredients,
             steps=steps,
-            image=f"uploads/{filename}"
+            image=f"uploads/{filename}",
+            user_id=current_user.id,
+            status="Опубликован"
         )
 
         try:
@@ -304,18 +299,27 @@ if __name__ == "__main__":
 
         db.create_all()
 
-        # Проверяем, есть ли столбец image в старой таблице recipes
+        # Проверяем, есть ли столбцы в старой таблице recipes
         columns = db.inspect(db.engine).get_columns("recipes")
         column_names = [column["name"] for column in columns]
 
-        # Если столбца нет, добавляем его
+        # Если столбца image нет, добавляем его
         if "image" not in column_names:
             db.session.execute(
                 db.text(
                     "ALTER TABLE recipes ADD COLUMN image VARCHAR(255)"
                 )
             )
-            db.session.commit()
+
+        # Если столбца status нет, добавляем его
+        if "status" not in column_names:
+            db.session.execute(
+                db.text(
+                    "ALTER TABLE recipes ADD COLUMN status VARCHAR(30) DEFAULT 'Опубликован'"
+                )
+            )
+
+        db.session.commit()
 
         print("База данных и таблицы готовы.")
 

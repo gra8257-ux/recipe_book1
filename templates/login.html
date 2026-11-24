@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="auth-box">
+
+    <h2>Вход</h2>
+
+    <!-- Сообщения Flask (выводят ошибки и успешный вход) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <p class="{{ category }}">{{ message }}</p>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- Форма входа -->
+    <form method="POST" action="{{ url_for('login') }}">
+
+        <input
+                type="text"
+                name="username"
+                placeholder="Имя пользователя"
+                required
+        >
+
+        <input
+                type="password"
+                name="password"
+                placeholder="Пароль"
+                required
+        >
+
+        <button type="submit" class="primary">
+            Войти
+        </button>
+
+    </form>
+
+    <p>
+        Нет аккаунта?
+        <a href="{{ url_for('register') }}">Зарегистрироваться</a>
+    </p>
+
+</div>
+
+<a class="back-link" href="{{ url_for('index') }}">
+    Вернуться на главную
+</a>
+
+{% endblock %}

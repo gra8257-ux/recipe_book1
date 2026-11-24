@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Мой профиль</h1>
+
+<div>
+
+    <p>
+        <strong>Логин:</strong>
+        {{ user.username }}
+    </p>
+
+    <p>
+        <strong>Электронная почта:</strong>
+        {{ user.email }}
+    </p>
+
+</div>
+
+<h2>Мои рецепты</h2>
+
+{% if recipes %}
+
+    <div class="recipe-grid">
+
+        {% for recipe in recipes %}
+
+        <div class="recipe-item">
+
+            <!-- Красная карточка с фотографией -->
+            <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}"
+               class="recipe-card">
+
+                {% if recipe.image %}
+                    <img src="{{ url_for('static', filename=recipe.image) }}"
+                         alt="{{ recipe.title }}">
+                {% endif %}
+
+            </a>
+
+            <!-- Название под карточкой -->
+            <h3 class="recipe-name">{{ recipe.title }}</h3>
+
+        </div>
+
+    {% endfor %}
+
+    </div>
+
+{% else %}
+
+    <p>Вы пока не опубликовали ни одного рецепта.</p>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>РњРѕР№ РїСЂРѕС„РёР»СЊ</h1>
+
+<div>
+
+    <p>
+        <strong>Р›РѕРіРёРЅ:</strong>
+        {{ user.username }}
+    </p>
+
+    <p>
+        <strong>Р­Р»РµРєС‚СЂРѕРЅРЅР°СЏ РїРѕС‡С‚Р°:</strong>
+        {{ user.email }}
+    </p>
+
+</div>
+
+<h2>РњРѕРё СЂРµС†РµРїС‚С‹</h2>
+
+{% if recipes %}
+
+    <div class="recipe-grid">
+
+        {% for recipe in recipes %}
+
+        <div class="recipe-item">
+
+            <!-- РљСЂР°СЃРЅР°СЏ РєР°СЂС‚РѕС‡РєР° СЃ С„РѕС‚РѕРіСЂР°С„РёРµР№ -->
+            <a href="{{ url_for('recipe_detail', recipe_id=recipe.id) }}"
+               class="recipe-card">
+
+                {% if recipe.image %}
+                    <img src="{{ url_for('static', filename=recipe.image) }}"
+                         alt="{{ recipe.title }}">
+                {% endif %}
+
+            </a>
+
+            <!-- РќР°Р·РІР°РЅРёРµ РїРѕРґ РєР°СЂС‚РѕС‡РєРѕР№ -->
+            <h3 class="recipe-name">{{ recipe.title }}</h3>
+
+        </div>
+
+    {% endfor %}
+
+    </div>
+
+
+{% else %}
+
+    <p>Р’С‹ РїРѕРєР° РЅРµ РѕРїСѓР±Р»РёРєРѕРІР°Р»Рё РЅРё РѕРґРЅРѕРіРѕ СЂРµС†РµРїС‚Р°.</p>
+
+{% endif %}
+
+{% endblock %}

@@ -591,12 +591,27 @@ button, input {
 }
 
 .photo-button {
-    display: inline-block;
-    padding: 12px 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    padding: 0;
     background: var(--red);
     color: white;
     border-radius: 12px;
+    font-size: 35px;
     cursor: pointer;
+}
+.paperclip-icon {
+    width: 38px;
+    height: 38px;
+    transform: rotate(-35deg);
+    transition: transform 0.2s;
+}
+
+.photo-button:hover .paperclip-icon {
+    transform: rotate(-45deg) scale(1.08);
 }
 
 .photo-button:hover {
