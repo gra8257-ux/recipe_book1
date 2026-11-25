@@ -11,6 +11,14 @@
              alt="Книга рецептов">
     </div>
 
+    <!-- Катеории -->
+    <div>
+        <a href="{{ url_for('index') }}">все</a>
+        {% for c in categories %}
+        <a href="{{ url_for('index', category=c) }}">{{ c }}</a>
+        {% endfor %}
+    </div>
+
     <!-- Каталог рецептов -->
     <div class="recipe-grid">
 
