@@ -31,7 +31,7 @@ app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 
 db = SQLAlchemy(app)
 
-# Настройка Flask-Login
+# Flask-Login
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
@@ -90,7 +90,7 @@ class Recipe(db.Model):
     status = db.Column(db.String(30), default="Опубликован", nullable=False)
 
 
-# Загрузчик пользователя для Flask-Login
+# Загрузчик Flask-Login
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -174,7 +174,7 @@ def register():
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
 
-        # Проверка: занят ли логин ИЛИ почта
+        # Проверка: занят ли логин И почта
         existing_user = db.session.scalars(
             db.select(User).where(
                 or_(User.username == username, User.email == email)
